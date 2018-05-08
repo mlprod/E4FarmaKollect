@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="ressources/css/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="ressources/style.css">
+    <link rel="stylesheet" href="ressources/css/fontawesome/web-fonts-with-css/css/fontawesome-all.min.css">
+    <script type="text/javascript" src="ressources/js/jquery.js"></script>
+    <script type="text/javascript" src="ressources/js/session.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</head>
+<body>
+
+<div id="navbar"></div>
+
+<section class="container">
+    <div class="row justify-content-md-center">
+        <div class="col-md-12">
+            <h2 id="title"></h2>
+        </div>
+    </div>
+</section>
+
+
+<script type="text/javascript">
+    window.onload = function () {
+        navbar();
+        logCheck();
+        var idMedic = sessionStorage.getItem('idMedic');
+        alert(idMedic);
+        document.title = idMedic + " | Farmakollect";
+        $.ajax({
+            type: "GET",
+            url: "/rest/medicament/" + idMedic,
+            dataType: "json",
+            success: function (data) {
+                var medicament = data;
+                document.getElementById('code').value = medicament.code.familleCode;
+                document.getElementById('id').value = medicament.id;
+                document.getElementById('label').value = medicament.label;
+                document.getElementById('prix').value = medicament.stock.prix;
+                document.getElementById('stock').value = medicament.stock.nombre;
+                document.getElementById('composition').value = medicament.composition;
+                document.getElementById('effets').value = medicament.effets;
+                document.getElementById('contreIndic').value = medicament.contreIndic;
+                $('#title').html(idMedic)
+            }
+        });
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="gsb3@localhost">
+  <database-model serializer="dbm" rdbms="MYSQL" format-version="4.4">
+    <root id="1"/>
+    <schema id="2" parent="1" name="gsb3">
+      <Current>1</Current>
+      <Visible>1</Visible>
+    </schema>
+    <schema id="3" parent="1" name="as-football"/>
+    <schema id="4" parent="1" name="bts1"/>
+    <schema id="5" parent="1" name="catalogue"/>
+    <schema id="6" parent="1" name="gestioncommerciale"/>
+    <schema id="7" parent="1" name="gsb"/>
+    <schema id="8" parent="1" name="gsb2"/>
+    <schema id="9" parent="1" name="immo"/>
+    <schema id="10" parent="1" name="immo_slave"/>
+    <schema id="11" parent="1" name="information_schema"/>
+    <schema id="12" parent="1" name="medibase"/>
+    <schema id="13" parent="1" name="mission-ski"/>
+    <schema id="14" parent="1" name="mvc_sql"/>
+    <schema id="15" parent="1" name="mysql"/>
+    <schema id="16" parent="1" name="parc_info"/>
+    <schema id="17" parent="1" name="performance_schema"/>
+    <schema id="18" parent="1" name="samdb"/>
+    <schema id="19" parent="1" name="sys"/>
+    <schema id="20" parent="1" name="testjdbc"/>
+    <table id="21" parent="2" name="commande"/>
+    <table id="22" parent="2" name="etablissement"/>
+    <table id="23" parent="2" name="famille"/>
+    <table id="24" parent="2" name="medicament"/>
+    <table id="25" parent="2" name="role"/>
+    <table id="26" parent="2" name="stock"/>
+    <table id="27" parent="2" name="user"/>
+    <table id="28" parent="2" name="visite"/>
+    <column id="29" parent="21" name="COM_ID">
+      <Position>1</Position>
+      <DataType>int(9)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="30" parent="21" name="USER_ID">
+      <Position>2</Position>
+      <DataType>int(9)|0</DataType>
+    </column>
+    <column id="31" parent="21" name="MED_ID">
+      <Position>3</Position>
+      <DataType>varchar(9)|0</DataType>
+    </column>
+    <column id="32" parent="21" name="COM_QTE">
+      <Position>4</Position>
+      <DataType>int(9)|0</DataType>
+    </column>
+    <column id="33" parent="21" name="COM_DATE">
+      <Position>5</Position>
+      <DataType>timestamp|0</DataType>
+    </column>
+    <column id="34" parent="21" name="COM_ETAT">
+      <Position>6</Position>
+      <DataType>tinyint(1)|0</DataType>
+      <DefaultExpression>&apos;0&apos;</DefaultExpression>
+    </column>
+    <index id="35" parent="21" name="commande_medicament_MED_ID_fk">
+      <ColNames>MED_ID</ColNames>
+    </index>
+    <index id="36" parent="21" name="commande_user_USER_ID_fk">
+      <ColNames>USER_ID</ColNames>
+    </index>
+    <key id="37" parent="21" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>COM_ID</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="38" parent="21" name="commande_user_USER_ID_fk">
+      <ColNames>USER_ID</ColNames>
+      <RefSchemaName>gsb3</RefSchemaName>
+      <RefTableName>user</RefTableName>
+      <RefColNames>USER_ID</RefColNames>
+    </foreign-key>
+    <foreign-key id="39" parent="21" name="commande_medicament_MED_ID_fk">
+      <ColNames>MED_ID</ColNames>
+      <RefSchemaName>gsb3</RefSchemaName>
+      <RefTableName>medicament</RefTableName>
+      <RefColNames>MED_ID</RefColNames>
+    </foreign-key>
+    <column id="40" parent="22" name="ETAB_ID">
+      <Position>1</Position>
+      <DataType>int(9)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="41" parent="22" name="ETAB_NOM">
+      <Position>2</Position>
+      <DataType>varchar(50)|0</DataType>
+    </column>
+    <column id="42" parent="22" name="ETAB_ADRESSE">
+      <Position>3</Position>
+      <DataType>varchar(80)|0</DataType>
+    </column>
+    <column id="43" parent="22" name="ETAB_CP">
+      <Position>4</Position>
+      <DataType>int(5)|0</DataType>
+    </column>
+    <column id="44" parent="22" name="ETAB_VILLE">
+      <Position>5</Position>
+      <DataType>varchar(30)|0</DataType>
+    </column>
+    <key id="45" parent="22" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>ETAB_ID</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="46" parent="23" name="FAM_CODE">
+      <Position>1</Position>
+      <DataType>varchar(3)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="47" parent="23" name="FAM_LIBELLE">
+      <Position>2</Position>
+      <DataType>varchar(67)|0</DataType>
+    </column>
+    <key id="48" parent="23" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>FAM_CODE</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="49" parent="24" name="MED_ID">
+      <Position>1</Position>
+      <DataType>varchar(9)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="50" parent="24" name="MED_LABEL">
+      <Position>2</Position>
+      <DataType>varchar(19)|0</DataType>
+    </column>
+    <column id="51" parent="24" name="FAM_CODE">
+      <Position>3</Position>
+      <DataType>varchar(3)|0</DataType>
+    </column>
+    <column id="52" parent="24" name="MED_COMPOSITION">
+      <Position>4</Position>
+      <DataType>varchar(80)|0</DataType>
+    </column>
+    <column id="53" parent="24" name="MED_EFFETS">
+      <Position>5</Position>
+      <DataType>varchar(194)|0</DataType>
+    </column>
+    <column id="54" parent="24" name="MED_CONTREINDIC">
+      <Position>6</Position>
+      <DataType>varchar(236)|0</DataType>
+    </column>
+    <index id="55" parent="24" name="medicament_famille_FAM_CODE_fk">
+      <ColNames>FAM_CODE</ColNames>
+    </index>
+    <key id="56" parent="24" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>MED_ID</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="57" parent="24" name="medicament_famille_FAM_CODE_fk">
+      <ColNames>FAM_CODE</ColNames>
+      <RefSchemaName>gsb3</RefSchemaName>
+      <RefTableName>famille</RefTableName>
+      <RefColNames>FAM_CODE</RefColNames>
+    </foreign-key>
+    <column id="58" parent="25" name="ROLE_ID">
+      <Position>1</Position>
+      <DataType>int(9)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="59" parent="25" name="ROLE_LIBELLE">
+      <Position>2</Position>
+      <DataType>varchar(50)|0</DataType>
+    </column>
+    <key id="60" parent="25" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>ROLE_ID</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="61" parent="26" name="MED_ID">
+      <Position>1</Position>
+      <DataType>varchar(9)|0</DataType>
+    </column>
+    <column id="62" parent="26" name="STO_NUM">
+      <Position>2</Position>
+      <DataType>int(11)|0</DataType>
+    </column>
+    <column id="63" parent="26" name="STO_PRIX">
+      <Position>3</Position>
+      <DataType>double|0</DataType>
+    </column>
+    <index id="64" parent="26" name="stock_medicament_MED_ID_fk">
+      <ColNames>MED_ID</ColNames>
+    </index>
+    <foreign-key id="65" parent="26" name="stock_medicament_MED_ID_fk">
+      <ColNames>MED_ID</ColNames>
+      <RefSchemaName>gsb3</RefSchemaName>
+      <RefTableName>medicament</RefTableName>
+      <RefColNames>MED_ID</RefColNames>
+    </foreign-key>
+    <column id="66" parent="27" name="USER_ID">
+      <Position>1</Position>
+      <DataType>int(9)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="67" parent="27" name="USER_LOGIN">
+      <Position>2</Position>
+      <DataType>varchar(20)|0</DataType>
+    </column>
+    <column id="68" parent="27" name="USER_PASSWORD">
+      <Position>3</Position>
+      <DataType>varchar(30)|0</DataType>
+    </column>
+    <column id="69" parent="27" name="USER_NOM">
+      <Position>4</Position>
+      <DataType>varchar(35)|0</DataType>
+    </column>
+    <column id="70" parent="27" name="USER_PRENOM">
+      <Position>5</Position>
+      <DataType>varchar(20)|0</DataType>
+    </column>
+    <column id="71" parent="27" name="ETAB_ID">
+      <Position>6</Position>
+      <DataType>int(9)|0</DataType>
+    </column>
+    <column id="72" parent="27" name="ROLE_ID">
+      <Position>7</Position>
+      <DataType>int(9)|0</DataType>
+    </column>
+    <index id="73" parent="27" name="user_etablissement_ETAB_ID_fk">
+      <ColNames>ETAB_ID</ColNames>
+    </index>
+    <index id="74" parent="27" name="user_role_ROLE_ID_fk">
+      <ColNames>ROLE_ID</ColNames>
+    </index>
+    <key id="75" parent="27" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>USER_ID</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="76" parent="27" name="user_etablissement_ETAB_ID_fk">
+      <ColNames>ETAB_ID</ColNames>
+      <RefSchemaName>gsb3</RefSchemaName>
+      <RefTableName>etablissement</RefTableName>
+      <RefColNames>ETAB_ID</RefColNames>
+    </foreign-key>
+    <foreign-key id="77" parent="27" name="user_role_ROLE_ID_fk">
+      <ColNames>ROLE_ID</ColNames>
+      <RefSchemaName>gsb3</RefSchemaName>
+      <RefTableName>role</RefTableName>
+      <RefColNames>ROLE_ID</RefColNames>
+    </foreign-key>
+    <column id="78" parent="28" name="VIS_ID">
+      <Position>1</Position>
+      <DataType>int(9)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="79" parent="28" name="USER_ID">
+      <Position>2</Position>
+      <DataType>int(9)|0</DataType>
+    </column>
+    <column id="80" parent="28" name="VIS_COM">
+      <Position>3</Position>
+      <DataType>varchar(300)|0</DataType>
+    </column>
+    <index id="81" parent="28" name="visite_user_USER_ID_fk">
+      <ColNames>USER_ID</ColNames>
+    </index>
+    <key id="82" parent="28" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>VIS_ID</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="83" parent="28" name="visite_user_USER_ID_fk">
+      <ColNames>USER_ID</ColNames>
+      <RefSchemaName>gsb3</RefSchemaName>
+      <RefTableName>user</RefTableName>
+      <RefColNames>USER_ID</RefColNames>
+    </foreign-key>
+  </database-model>
+</dataSource>

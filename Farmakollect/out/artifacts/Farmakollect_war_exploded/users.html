@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestion Administrateur | Farmakollect</title>
+    <link rel="stylesheet" href="ressources/css/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="ressources/style.css">
+    <link rel="stylesheet" href="ressources/css/fontawesome/web-fonts-with-css/css/fontawesome-all.min.css">
+    <script type="text/javascript" src="ressources/js/jquery.js"></script>
+    <script type="text/javascript" src="ressources/js/session.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+</head>
+<body>
+
+<div id="navbar"></div>
+
+<section class="container">
+
+    <div class="row justify-content-md-center">
+        <div class="col-md-12">
+            <h2>Espace Administrateur</h2>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="accueil.html">Accueil</a></li>
+                    <li class="breadcrumb-item active">Espace Administrateur</li>
+                </ol>
+            </nav>
+
+            <div id='info'></div>
+
+            <div class="row">
+                <div class="form-group col-md-3">
+                    <a href="manage.html" class="btn btn-info btn-block "><span class="fa fa-pills"></span></br>Ajouter un medicament</a>
+                </div>
+
+                <div class="form-group col-md-3">
+                    <a class="btn btn-info btn-block disabled"><span class="fa fa-history"></span></br>Commandes des utilisateurs</a>
+                </div>
+
+                <div class="form-group col-md-3">
+                    <a href="medicaux.html" class="btn btn-info btn-block"><span class="fa fa-briefcase-medical"></span></br>Organismes médicaux</a>
+                </div>
+
+                <div class="form-group col-md-3">
+                    <a href="users.html" class="btn btn-info btn-block "><span class="fa fa-users"></span></br>Utilisateurs</a>
+                </div>
+            </div>
+            <div id="generate"></div>
+
+        </div>
+
+    </div>
+</section>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        navbar();
+        logCheck();
+
+        var info = sessionStorage.getItem('label');
+        var blockInfo = "";
+        if (info != null){
+            blockInfo =
+                "<div class='card border-success mb-3'>" +
+                "<div class='card-body text-success'>" +
+                "<p class='card-text'><span class='fa fa-info'></span> - L'utilisateur " + info + " a été supprimé avec succès.</p>" +
+                "</div>" +
+                "</div>";
+            $('#info').html(blockInfo);
+            sessionStorage.removeItem('id');
+            sessionStorage.removeItem('nom');
+        }
+        sessionStorage.removeItem('idEtab');
+
+        $.ajax({
+            type: "GET",
+            url: "/rest/user/list",
+            dataType: "json",
+            success: function (data) {
+                var res = data;
+                var generate = "<h3>Liste des utilisateurs</h3>" +
+                    "<div class='row justify-content-end mb-2'>" +
+                    "<div class='col-md-4'>" +
+                    "<a href='UsersAdd.html' class='btn btn-info btn-block'><span class='fa fa-plus'></span> Ajouter un utilsateur</a>" +
+                    "</div>" +
+                    "</div>"+
+                    "<table class='table table-striped'>" +
+                    "<thead>" +
+                    "<tr>" +
+                    "<th>#</th>" +
+                    "<th>Id</th>" +
+                    "<th>Login</th>" +
+                    "<th>Nom</th>" +
+                    "<th>Prenom</th>" +
+                    "<th>Action</th>"+
+                    "</thead>" +
+                    "<tbody>";
+                for (var i = 0; i < res.length; i++){
+                    generate = generate + "<tr>" +
+                        "<td>" + i + "</td>" +
+                        "<td>" + res[i].id + "</td>" +
+                        "<td>" + res[i].login + "</td>" +
+                        "<td>" + res[i].nom + "</td>" +
+                        "<td>" + res[i].prenom + "</td>" +
+                        "<td><div class='btn-group'>" +
+                        "</div></td></tr>"
+                        "</div></td></tr>"
+                }
+                generate = generate + "</tbody></table>";
+
+                $('#generate').html(generate);
+            }
+        });
+
+    });
+
+
+</script>
+</body>
+</html>

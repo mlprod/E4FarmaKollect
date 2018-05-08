@@ -1,0 +1,6 @@
+ applications:
+   - name: FarmaKollect
+     random-route: true
+     path: out/artifacts/Farmakollect_war/Farmakollect_war.war
+     memory: 256M
+     buildpack: java_buildpack

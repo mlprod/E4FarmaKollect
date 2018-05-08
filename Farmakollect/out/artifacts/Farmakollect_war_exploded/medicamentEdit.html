@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="ressources/css/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="ressources/style.css">
+    <link rel="stylesheet" href="ressources/css/fontawesome/web-fonts-with-css/css/fontawesome-all.min.css">
+    <script type="text/javascript" src="ressources/js/jquery.js"></script>
+    <script type="text/javascript" src="ressources/js/session.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light ml-auto fixed-top" style="background-color: #91dbdb">
+    <a class="navbar-brand ml-auto" href="accueil.html">Farmakollect</a>
+
+    <ul class="navbar-nav">
+
+        <li class="nav-item ecart">
+            <a href="manage.html" class="btn btn-block btn-outline-info"><span class="fa fa-user-plus" title="Espace Administrateur"></span></a>
+        </li>
+
+        <li class="nav-item ecart">
+            <a href="" class="btn btn-block btn-outline-info"><span class="fa fa-shopping-basket" title="Panier"></span></a>
+        </li>
+
+        <li class="nav-item ecart">
+            <a href="" class="btn btn-block btn-outline-info"><span class="fa fa-history" title="Historique"></span></a>
+        </li>
+
+        <li class="nav-item ecart">
+            <a href="" class="btn btn-block btn-outline-info"><span class="fa fa-cog" title="Réglages"></span></a>
+        </li>
+
+        <li class="nav-item ecart">
+            <a href="" class="btn btn-block btn-outline-info"><span class="fa fa-sign-out-alt"></span> Se déconnecter</a>
+        </li>
+    </ul>
+</nav>
+
+<section class="container">
+
+    <div class="row justify-content-md-center">
+        <div class="col-md-12">
+            <h2 id="title"></h2>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="accueil.html">Accueil</a></li>
+                    <li class="breadcrumb-item"><a href="manage.html">Espace Administrateur</a></li>
+                    <li class="breadcrumb-item active">Editer un produit</li>
+                </ol>
+            </nav>
+
+            <div class="container col-md-8">
+                <div class="row justify-content-between">
+                    <div class="form-group col-md-3">
+                        <label class="lead">Code</label>
+                        <input type="text" id="id" class="form-control" maxlength="9" disabled/>
+                    </div>
+
+                    <div class="form-group col-md-8">
+                        <label class="lead">Label du produit</label>
+                        <input type="text" id="label" class="form-control" required/>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label class="lead">Genre</label>
+                        <div id="select"></div>
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <label class="lead">Prix</label>
+                        <input type="text" id="prix" class="form-control"/>
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <label class="lead">Stock</label>
+                        <input type="number" id="stock" class="form-control" min="0"/>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <label class="lead">Composition</label>
+                        <textarea class="form-control" rows="2" id="composition"></textarea>
+                    </div>
+
+                    <div class="form-group col-md-12">
+                        <label class="lead">Effets</label>
+                        <textarea class="form-control" rows="3" id="effets"></textarea>
+                    </div>
+
+                    <div class="form-group col-md-12">
+                        <label class="lead">Contre indications</label>
+                        <textarea class="form-control" rows="3" id="contreIndic"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <a id="edit" class='btn btn-info btn-block'><span class='fa fa-plus'></span> Editer ce produit</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<script type="text/javascript">
+    window.onload = function () {
+        var idMedic = sessionStorage.getItem('idMedic');
+        var code = "iuy";
+        alert(code);
+        document.title = "Editer " + idMedic + " | Farmakollect";
+        $('#title').html('Edition du produit ' + idMedic);
+        $.ajax({
+            type: "GET",
+            url: "/rest/medicament/" + idMedic,
+            dataType: "json",
+            success: function (data) {
+                var medicament = data;
+                code = medicament.code.familleCode;
+                document.getElementById('id').value = medicament.id;
+                document.getElementById('label').value = medicament.label;
+                document.getElementById('prix').value = medicament.stock.prix;
+                document.getElementById('stock').value = medicament.stock.nombre;
+                document.getElementById('composition').value = medicament.composition;
+                document.getElementById('effets').value = medicament.effets;
+                document.getElementById('contreIndic').value = medicament.contreIndic;
+            }
+        });
+
+        $.ajax({
+            type: "GET",
+            url: "/rest/medicament/familleMedicament",
+            dataType: "json",
+            success: function (data) {
+                var res = data;
+                alert(code);
+                var codeValue = null;
+                var select = "<select id='code' class='custom-select'>";
+                for (var i = 0; i < res.length; i++) {
+                    codeValue = res[i].familleCode;
+                    if(res[i].familleCode = code){
+                        select = select + "<option value='" + codeValue + "' selected>";
+                    }else{
+                        select = select + "<option value='" + codeValue + "'>";
+                    }
+                    select = select + codeValue + " - " + res[i].libelle + "</option>";
+                }
+                select = select + "</select>";
+                $('#select').html(select);
+            }
+        });
+    };
+
+    $('#edit').click(function () {
+        var medicament = new Object();
+        var stock = new Object();
+        var code = new Object();
+        medicament.id = $('#id').val();
+        medicament.label = $('#label').val();
+        code.familleCode = $('#code').val();
+        stock.nombre = $('#stock').val();
+        stock.prix = $('#prix').val();
+        medicament.composition = $('#composition').val();
+        medicament.effets = $('#effets').val();
+        medicament.contreIndic = $('#contreIndic').val();
+        medicament.code = code;
+        medicament.stock = stock;
+        medicament = JSON.stringify(medicament);
+        $.ajax({
+            type: "PUT",
+            url: "/rest/medicament/edit/" + sessionStorage.getItem('idMedic'),
+            contentType: "application/json",
+            data: medicament,
+            success: function () {
+                swal("Produit édité", "", "success");
+                window.location.href = "manage.html";
+            },
+            error: function () {
+                swal("Erreur", "Une erreur est survenue", "warning");
+            }
+        })
+    })
+</script>
+
+</body>
+</html>

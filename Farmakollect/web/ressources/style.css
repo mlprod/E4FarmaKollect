@@ -1,0 +1,38 @@
+html, body{
+    height: 100%;
+    margin: 0;
+}
+
+
+section.background {
+    background-image: url('mde_bg.jpg');
+    background-size: contain;
+    background-position: bottom;
+    background-repeat: no-repeat;
+}
+
+.ecart{ padding-left: 1em;
+}
+
+
+.container{
+    background-color: #f4f6f9;
+}
+
+.navbar{
+    box-shadow: 10px 0px 18px #888888;
+}
+
+h2{
+    margin-top: 2.5em;
+}
+
+.breadcrumb{
+    margin-bottom: 3em;
+}
+
+.margin-lt{
+    margin-right: 1em;
+    margin-bottom: 1em;
+    margin-left: 1em;
+}

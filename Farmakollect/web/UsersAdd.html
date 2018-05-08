@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <title>Ajouter un utilisateur | Farmakollect</title>
+    <link rel="stylesheet" href="ressources/css/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="ressources/style.css">
+    <link rel="stylesheet" href="ressources/css/fontawesome/web-fonts-with-css/css/fontawesome-all.min.css">
+    <script type="text/javascript" src="ressources/js/jquery.js"></script>
+    <script type="text/javascript" src="ressources/js/session.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</head>
+
+<body>
+
+<div id="navbar"></div>
+
+<section class="container">
+
+    <div class="row justify-content-md-center">
+        <div class="col-md-12">
+            <h2>Ajouter un utilisateur</h2>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="accueil.html">Accueil</a></li>
+                    <li class="breadcrumb-item"><a href="manage.html">Espace Administrateur</a></li>
+                    <li class="breadcrumb-item active">Ajouter un utilisateur</li>
+                </ol>
+            </nav>
+
+            <div class="container col-md-8">
+                <div class="row justify-content-between">
+
+                    <div class="form-group col-md-6">
+                        <label class="lead">Login</label>
+                        <input type="text" id="login" class="form-control" required/>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label class="lead">Password</label>
+                        <input type="password" class="form-control" id="password"/>
+                    </div>
+
+                </div>
+
+
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label class="lead">Role</label>
+                        <div id="select-role"></div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="lead">Etablissement</label>
+                        <div id="select-etab"></div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label class="lead">Nom</label>
+                        <input type="text" id="nom" class="form-control" maxlength="100" required/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="lead">Prenom</label>
+                        <input type="text" id="prenom" class="form-control" maxlength="100" required/>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <a id="add" class='btn btn-info btn-block'><span class="fa fa-plus"></span> Ajouter cet utilisateur</a>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<script type="text/javascript">
+
+
+    window.onload = function () {
+        navbar();
+        logCheck();
+        $.ajax({
+            type: "GET",
+            url: "/rest/etablissement/list",
+            dataType: "json",
+            success: function (data) {
+                var res = data;
+                var select = "<select id='etablissement' class='custom-select'>";
+                for (var i = 0; i < res.length; i++) {
+                    select = select + "<option value='" + res[i].id + "'>" + res[i].nom + "</option>";
+                }
+                select = select + "</select>";
+                $('#select-etab').html(select);
+            }
+        });
+
+        $.ajax({
+            type: "GET",
+            url: "/rest/role/list",
+            dataType: "json",
+            success: function (data) {
+                var res = data;
+                var select = "<select id='role' class='custom-select'>";
+                for (var i = 0; i < res.length; i++) {
+                    select = select + "<option value='" + res[i].id + "'>" + res[i].libelle + "</option>";
+                }
+                select = select + "</select>";
+                $('#select-role').html(select);
+            }
+        });
+    };
+
+    $('#add').click(function () {
+        var user = new Object();
+        user.login = $('#login').val();
+        user.password = $('#password').val();
+        user.nom = $('#nom').val();
+        user.prenom = $('#prenom').val();
+        user.idRole = $('#role').val();
+        user.idEtab = $('#etablissement').val();
+        user=JSON.stringify(user);
+        $.ajax({
+            type: "PUT",
+            url: "/rest/user/save",
+            dataType: "application/json",
+            data: user,
+            success: function () {
+                swal("Utilisateur ajouté", "", "success");
+                window.location.href = "manage.html";
+            },
+            error: function () {
+                swal("Erreur", "Une erreur est survenue", "warning");
+            }
+        })
+    })
+
+
+
+</script>
+
+</body>
+</html>

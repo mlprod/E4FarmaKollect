@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Accueil | Farmakollect</title>
+    <link rel="stylesheet" href="ressources/css/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="ressources/style.css">
+    <link rel="stylesheet" href="ressources/css/fontawesome/web-fonts-with-css/css/fontawesome-all.min.css">
+    <script type="text/javascript" src="ressources/js/jquery.js"></script>
+    <script type="text/javascript" src="ressources/css/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="ressources/js/session.js"></script>
+</head>
+<body>
+
+<div id="navbar"></div>
+
+<section class="container">
+
+    <div id="carouselIndicators" class="carousel slide" data-ride="carousel">
+        <ol class="carousel-indicators">
+            <li data-target="#carouselIndicators" data-slide-to="0" class="active"></li>
+            <li data-target="#carouselIndicators" data-slide-to="1"></li>
+            <li data-target="#carouselIndicators" data-slide-to="2"></li>
+        </ol>
+        <div class="carousel-inner" data-interval="200">
+            <div class="carousel-item active">
+                <img class="d-block w-100" src="ressources/img/carousel_1.jpg">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>Farmakollect</h5>
+                    <p class="lead">La plateforme de commande dédiée à l'industrie pharmaceutique</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img class="d-block w-100" src="ressources/img/carousel_2.jpg">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>Nouveautés</h5>
+                    <p class="lead">Dès 2019, de nouveaux produits d'origine médicinales à pourvoir dans la boutique en ligne</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img class="d-block w-100" src="ressources/img/carousel_3.jpg">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>Recherche</h5>
+                    <p class="lead">Nous investissons dans la recherche pour tendre vers le progès de la médecine</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row justify-content-md-center">
+        <div class="col-md-12">
+            <h2>Accueil</h2>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item active">Accueil</li>
+                </ol>
+            </nav>
+            <h3>A découvrir</h3>
+            <div id="generate"></div>
+        </div>
+    </div>
+
+</section>
+
+<script type="text/javascript">
+    window.onload = function () {
+        navbar();
+        logCheck();
+        $.ajax({
+            type: "GET",
+            url: "/rest/medicament/list",
+            traditional: true,
+            dataType: "json",
+            success: function (data) {
+                var res = data;
+                var generate = "";
+                for (var i = 0; i < res.length; i++){
+                    generate = generate + "<div class='row'>";
+                    for (var u = 0; u < 3; u++, i++){
+                        var effets = res[i].effets;
+                        if (effets.length > 10){
+                            effets = effets.substr(0, 70) + "...";
+                        }
+                        generate = generate +
+                            "<div class='col-md-4'>" +
+                            "<div class='card' style='margin: 1em'>" +
+                            "<div class='card-header'>" +
+                            res[i].label +
+                            "</div>" +
+                            "<div class='card-body justify'>" +
+                            effets +
+                            "</div>" +
+                            "<div class='row justify-content-between margin-lt'>" +
+                            "<div class='col-md-5'>" +
+                            "<div class='text-muted'>" + res[i].stock.prix + "€ </div>" +
+
+                            "</div>" +
+                            "<div class='col-md-4'>" +
+                            "<a href='rest/medicament/"+ res[i].id +"' class='btn btn-info text-right'>Détails</a>" +
+
+                            "</div>" +
+                            "</div>" +
+                            "<div class='card-footer'>" +
+                            "</div>" +
+                            "</div>"+
+                            "</div>";
+                    }
+                    generate = generate + "</div>";
+                }
+                $('#generate').html(generate);
+            }
+        });
+    };
+
+    function viewMedicament(id) {
+        sessionStorage.setItem('idMedic', id);
+        document.location.href = 'medicamentView.html';
+    }
+
+
+</script>
+
+</body>
+</html>

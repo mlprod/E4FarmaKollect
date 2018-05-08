@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestion Administrateur | Farmakollect</title>
+    <link rel="stylesheet" href="ressources/css/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="ressources/style.css">
+    <link rel="stylesheet" href="ressources/css/fontawesome/web-fonts-with-css/css/fontawesome-all.min.css">
+    <script type="text/javascript" src="ressources/js/jquery.js"></script>
+    <script type="text/javascript" src="ressources/js/session.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+</head>
+<body>
+
+<div id="navbar"></div>
+
+<section class="container">
+
+    <div class="row justify-content-md-center">
+        <div class="col-md-12">
+            <h2>Espace Administrateur</h2>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="accueil.html">Accueil</a></li>
+                    <li class="breadcrumb-item active">Espace Administrateur</li>
+                </ol>
+            </nav>
+
+            <div id='info'></div>
+
+            <div class="row">
+                <div class="form-group col-md-3">
+                    <a href="medicamentAdd.html" class="btn btn-info btn-block disabled"><span class="fa fa-plus-circle"></span></br>Ajouter un utilisateur</a>
+                </div>
+
+                <div class="form-group col-md-3">
+                    <a class="btn btn-info btn-block disabled"><span class="fa fa-history"></span></br>Commandes des utilisateurs</a>
+                </div>
+
+                <div class="form-group col-md-3">
+                    <a href="medicaux.html" class="btn btn-info btn-block "><span class="fas fa-briefcase-medical"></span></br>Organismes médicaux</a>
+                </div>
+
+                <div class="form-group col-md-3">
+                    <a href="users.html" class="btn btn-info btn-block "><span class="fas fa-users"></span></br>Utilisateurs</a>
+                </div>
+            </div>
+            <div id="generate"></div>
+
+        </div>
+
+    </div>
+</section>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        navbar();
+        logCheck();
+
+        var info = sessionStorage.getItem('label');
+        var blockInfo = "";
+        if (info != null){
+            blockInfo =
+                "<div class='card border-success mb-3'>" +
+                "<div class='card-body text-success'>" +
+                "<p class='card-text'><span class='fa fa-info'></span> - L'etablissement " + info + " a été supprimé avec succès.</p>" +
+                "</div>" +
+                "</div>";
+            $('#info').html(blockInfo);
+            sessionStorage.removeItem('id');
+            sessionStorage.removeItem('nom');
+        }
+        sessionStorage.removeItem('idEtab');
+
+        $.ajax({
+            type: "GET",
+            url: "/rest/etablissement/list",
+            dataType: "json",
+            success: function (data) {
+                var res = data;
+                var generate = "<h3>Liste des organismes recensés</h3>" +
+                    "<div class='row justify-content-end mb-2'>" +
+                    "<div class='col-md-4'>" +
+                    "<a href='EtablissementAdd.html' class='btn btn-info btn-block'><span class='fa fa-plus'></span> Ajouter un etablissement</a>" +
+                    "</div>" +
+                    "</div>"+
+                    "<table class='table table-striped'>" +
+                    "<thead>" +
+                    "<tr>" +
+                    "<th>#</th>" +
+                    "<th>Id</th>" +
+                    "<th>Nom</th>" +
+                    "<th>Adresse</th>" +
+                    "<th>CP</th>" +
+                    "<th>Ville</th>" +
+                    "<th>Action</th>"+
+                    "</thead>" +
+                    "<tbody>";
+                for (var i = 0; i < res.length; i++){
+                    generate = generate + "<tr>" +
+                        "<td>" + i + "</td>" +
+                        "<td>" + res[i].id + "</td>" +
+                        "<td>" + res[i].nom + "</td>" +
+                        "<td>" + res[i].adresse + "</td>" +
+                        "<td>" + res[i].cp + "</td>" +
+                        "<td>" + res[i].ville + "</td>" +
+                        "<td><div class='btn-group'>" +
+                        "<a class='btn btn-sm btn-primary' onclick=\"viewMedicament('" + res[i].id + "')\"><span class='fa fa-info' title='Informations'></a>" +
+                        "<a class='btn btn-sm btn-warning' onclick=\"editMedicament('" + res[i].id + "')\"><span class='fa fa-edit' title='Editer'></a>" +
+                        "<a class='btn btn-sm btn-danger' onclick=\"deleteMedicament('" + res[i].id + "', '" + res[i].label + "')\"><span class='fa fa-trash-alt' title='Supprimer'></a>" +
+                        "</div></td></tr>"
+
+                }
+                generate = generate + "</tbody></table>";
+
+                $('#generate').html(generate);
+            }
+        });
+
+    });
+
+
+</script>
+</body>
+</html>

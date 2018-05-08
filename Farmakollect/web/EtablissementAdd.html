@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <title>Ajouter un établissement | Farmakollect</title>
+    <link rel="stylesheet" href="ressources/css/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="ressources/style.css">
+    <link rel="stylesheet" href="ressources/css/fontawesome/web-fonts-with-css/css/fontawesome-all.min.css">
+    <script type="text/javascript" src="ressources/js/jquery.js"></script>
+    <script type="text/javascript" src="ressources/js/session.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</head>
+
+<body>
+
+<div id="navbar"></div>
+
+<section class="container">
+
+    <div class="row justify-content-md-center">
+        <div class="col-md-12">
+            <h2>Ajouter un établissement</h2>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="accueil.html">Accueil</a></li>
+                    <li class="breadcrumb-item"><a href="manage.html">Espace Administrateur</a></li>
+                    <li class="breadcrumb-item active">Ajouter un établissement</li>
+                </ol>
+            </nav>
+
+            <div class="container col-md-8">
+                <div class="row justify-content-between">
+                    <div class="form-group col-md-3">
+                        <label class="lead">Id</label>
+                        <input type="text" id="id" class="form-control" maxlength="9" required/>
+                    </div>
+
+                    <div class="form-group col-md-8">
+                        <label class="lead">Nom de l'établissement</label>
+                        <input type="text" id="nom" class="form-control" required/>
+                    </div>
+
+                </div>
+
+
+                <div class="row justify-content-between">
+                    <div class="form-group col-md-9">
+                        <label class="lead">Adresse</label>
+                        <input type="text" id="adresse" class="form-control" maxlength="50" required/>
+                    </div>
+
+
+                    <div class="form-group col-md-3">
+                        <label class="lead">Code Postal</label>
+                        <input type="number" id="cp" class="form-control" maxlength="5"/>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <label class="lead">Ville</label>
+                        <textarea class="form-control" rows="1" id="ville"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <a id="add" class='btn btn-info btn-block'><span class="fa fa-plus"></span> Ajouter cet etablissement</a>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<script type="text/javascript">
+    window.onload = function () {
+        navbar();
+        logCheck();
+        $.ajax({
+            type: "GET",
+            url: "/rest/etablissement/list",
+            dataType: "json",
+            success: function (data) {
+                var res = data;
+                var select = "<select id='code' class='custom-select'>";
+                for (var i = 0; i < res.length; i++) {
+                    select = select + "<option value='" + res[i].id + "'>" + res[i].nom + " - " + res[i].adresse + " - " + res[i].cp + " - " + res[i].Ville + "</option>";
+                }
+                select = select + "</select>";
+                $('#select').html(select);
+            }
+        });
+    };
+
+    $('#add').click(function () {
+        var etablissement = new Object();
+        etablissement.id = $('#id').val();
+        etablissement.nom = $('#nom').val();
+        etablissement.adresse = $('#adresse').val();
+        etablissement.cp = $('#cp').val();
+        etablissement.ville = $('#ville').val();
+        etablissement = JSON.stringify(etablissement);
+        $.ajax({
+            type: "PUT",
+            url: "/rest/etablissement/save",
+            contentType: "application/json",
+            data: etablissement,
+            success: function () {
+                swal("Etablissement ajouté", "", "success");
+                window.location.href = "manage.html";
+            },
+            error: function () {
+                swal("Erreur", "Une erreur est survenue", "warning");
+            }
+        })
+
+    })
+</script>
+
+</body>
+</html>
